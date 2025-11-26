@@ -1,0 +1,53 @@
+/* file: bst_insert_delete.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *left, *right;
+} Node;
+
+Node* newNode(int x){ Node *n = malloc(sizeof(Node)); n->data=x; n->left=n->right=NULL; return n; }
+
+Node* insert(Node* root, int x){
+    if(!root) return newNode(x);
+    if(x < root->data) root->left = insert(root->left, x);
+    else if(x > root->data) root->right = insert(root->right, x);
+    return root;
+}
+
+Node* findMin(Node* r){ while(r && r->left) r = r->left; return r; }
+
+Node* delete(Node* root, int x){
+    if(!root) return NULL;
+    if(x < root->data) root->left = delete(root->left, x);
+    else if(x > root->data) root->right = delete(root->right, x);
+    else {
+        if(!root->left){
+            Node *r = root->right; free(root); return r;
+        } else if(!root->right){
+            Node *l = root->left; free(root); return l;
+        } else {
+            Node *succ = findMin(root->right);
+            root->data = succ->data;
+            root->right = delete(root->right, succ->data);
+        }
+    }
+    return root;
+}
+
+void inorder(Node* r){ if(!r) return; inorder(r->left); printf("%d ", r->data); inorder(r->right); }
+
+int main(){
+    Node *root = NULL;
+    int choice, v;
+    while(1){
+        printf("\n1-insert 2-delete 3-inorder 0-exit\nChoice: ");
+        if(scanf("%d",&choice)!=1) break;
+        if(choice==0) break;
+        if(choice==1){ printf("val: "); scanf("%d",&v); root = insert(root, v); }
+        else if(choice==2){ printf("val: "); scanf("%d",&v); root = delete(root, v); }
+        else if(choice==3){ inorder(root); printf("\n"); }
+    }
+    return 0;
+}
