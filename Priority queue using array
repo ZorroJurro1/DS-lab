@@ -1,0 +1,64 @@
+/* file: priority_queue.c */
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+typedef struct {
+    int data;
+    int priority;
+} PQItem;
+
+PQItem pq[MAX];
+int n = 0;
+
+int isEmpty(){ return n==0; }
+int isFull(){ return n==MAX; }
+
+void insert(int val, int pr){
+    if(isFull()){ printf("Full\n"); return; }
+    pq[n].data = val; pq[n].priority = pr; n++;
+}
+
+int deletePQ(){
+    if(isEmpty()){ printf("Empty\n"); return -1; }
+    // find highest priority (largest pr)
+    int idx = 0;
+    for(int i=1;i<n;i++)
+        if(pq[i].priority > pq[idx].priority) idx = i;
+    int val = pq[idx].data;
+    // shift
+    for(int i=idx;i<n-1;i++) pq[i]=pq[i+1];
+    n--;
+    return val;
+}
+
+int peek(){
+    if(isEmpty()){ printf("Empty\n"); return -1; }
+    int idx=0;
+    for(int i=1;i<n;i++)
+        if(pq[i].priority > pq[idx].priority) idx=i;
+    return pq[idx].data;
+}
+
+void display(){
+    if(isEmpty()){ printf("Empty\n"); return; }
+    for(int i=0;i<n;i++) printf("(val=%d,pr=%d) ", pq[i].data, pq[i].priority);
+    printf("\n");
+}
+
+int main(){
+    int ch, v, p;
+    while(1){
+        printf("\n1-insert 2-delete 3-peek 4-display 0-exit\nChoice: ");
+        if(scanf("%d",&ch)!=1) break;
+        if(ch==0) break;
+        switch(ch){
+            case 1: printf("Value Priority: "); scanf("%d %d",&v,&p); insert(v,p); break;
+            case 2: printf("Deleted: %d\n", deletePQ()); break;
+            case 3: printf("Peek: %d\n", peek()); break;
+            case 4: display(); break;
+            default: printf("Invalid\n");
+        }
+    }
+    return 0;
+}
