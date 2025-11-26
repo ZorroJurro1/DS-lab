@@ -1,0 +1,50 @@
+/* file: stack_array.c */
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+int top = -1;
+int stack[MAX];
+
+int isFull(){ return top == MAX-1; }
+int isEmpty(){ return top == -1; }
+
+void push(int x){
+    if(isFull()){ printf("Stack overflow\n"); return; }
+    stack[++top] = x;
+}
+
+int pop(){
+    if(isEmpty()){ printf("Stack underflow\n"); return -1; }
+    return stack[top--];
+}
+
+int peek(){
+    if(isEmpty()){ printf("Stack empty\n"); return -1; }
+    return stack[top];
+}
+
+void display(){
+    if(isEmpty()){ printf("Empty stack\n"); return; }
+    for(int i=top;i>=0;i--) printf("%d ", stack[i]);
+    printf("\n");
+}
+
+int main(){
+    int choice, val;
+    while(1){
+        printf("\n1-push 2-pop 3-peek 4-display 5-isEmpty 6-isFull 0-exit\nChoice: ");
+        if(scanf("%d",&choice)!=1) break;
+        if(choice==0) break;
+        switch(choice){
+            case 1: printf("Value: "); scanf("%d",&val); push(val); break;
+            case 2: printf("Popped: %d\n", pop()); break;
+            case 3: printf("Top: %d\n", peek()); break;
+            case 4: display(); break;
+            case 5: printf(isEmpty()?"Empty\n":"Not empty\n"); break;
+            case 6: printf(isFull()?"Full\n":"Not full\n"); break;
+            default: printf("Invalid\n");
+        }
+    }
+    return 0;
+}
