@@ -1,0 +1,34 @@
+/* file: bst_traversals.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *left, *right;
+} Node;
+
+Node* newNode(int x){ Node *n = malloc(sizeof(Node)); n->data=x; n->left=n->right=NULL; return n; }
+
+Node* insert(Node* root, int x){
+    if(!root) return newNode(x);
+    if(x < root->data) root->left = insert(root->left, x);
+    else root->right = insert(root->right, x);
+    return root;
+}
+
+void inorder(Node* r){ if(!r) return; inorder(r->left); printf("%d ", r->data); inorder(r->right); }
+void preorder(Node* r){ if(!r) return; printf("%d ", r->data); preorder(r->left); preorder(r->right); }
+void postorder(Node* r){ if(!r) return; postorder(r->left); postorder(r->right); printf("%d ", r->data); }
+
+int main(){
+    Node *root = NULL;
+    int n, x;
+    printf("Number of nodes: ");
+    if(scanf("%d",&n)!=1) return 0;
+    printf("Enter values: ");
+    for(int i=0;i<n;i++){ scanf("%d",&x); root = insert(root, x); }
+    printf("Inorder: "); inorder(root); printf("\n");
+    printf("Preorder: "); preorder(root); printf("\n");
+    printf("Postorder: "); postorder(root); printf("\n");
+    return 0;
+}
