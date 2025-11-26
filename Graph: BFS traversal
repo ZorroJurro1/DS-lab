@@ -1,0 +1,55 @@
+/* file: graph_bfs.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct AdjNode {
+    int dest;
+    struct AdjNode *next;
+} AdjNode;
+
+typedef struct Graph {
+    int V;
+    AdjNode **array;
+} Graph;
+
+AdjNode* newAdjNode(int d){ AdjNode* n = malloc(sizeof(AdjNode)); n->dest=d; n->next=NULL; return n; }
+Graph* createGraph(int V){
+    Graph *g = malloc(sizeof(Graph)); g->V=V;
+    g->array = malloc(V*sizeof(AdjNode*));
+    for(int i=0;i<V;i++) g->array[i]=NULL;
+    return g;
+}
+void addEdge(Graph* g, int src, int dest){
+    AdjNode* n = newAdjNode(dest); n->next = g->array[src]; g->array[src]=n;
+    // for undirected:
+    n = newAdjNode(src); n->next = g->array[dest]; g->array[dest]=n;
+}
+
+void BFS(Graph* g, int start){
+    int V = g->V;
+    int *visited = calloc(V, sizeof(int));
+    int *q = malloc(V * sizeof(int)); int front=0, rear=0;
+    visited[start]=1; q[rear++]=start;
+    while(front<rear){
+        int u = q[front++];
+        printf("%d ", u);
+        for(AdjNode *p = g->array[u]; p; p=p->next){
+            if(!visited[p->dest]){ visited[p->dest]=1; q[rear++]=p->dest; }
+        }
+    }
+    free(visited); free(q);
+}
+
+int main(){
+    int V, E, u, v, s;
+    printf("Vertices, Edges: ");
+    if(scanf("%d %d",&V,&E)!=2) return 0;
+    Graph *g = createGraph(V);
+    printf("Enter edges (u v) (0-based):\n");
+    for(int i=0;i<E;i++){ scanf("%d %d",&u,&v); addEdge(g,u,v); }
+    printf("Start vertex: "); scanf("%d",&s);
+    printf("BFS: ");
+    BFS(g, s);
+    printf("\n");
+    return 0;
+}
