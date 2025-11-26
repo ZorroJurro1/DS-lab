@@ -1,0 +1,58 @@
+/* file: dll.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *prev, *next;
+} Node;
+
+Node *head = NULL;
+
+void insertFront(int x){
+    Node *n = malloc(sizeof(Node)); n->data = x; n->prev=NULL; n->next=head;
+    if(head) head->prev = n;
+    head = n;
+}
+
+void insertEnd(int x){
+    Node *n = malloc(sizeof(Node)); n->data=x; n->next=NULL;
+    if(!head){ n->prev=NULL; head=n; return; }
+    Node *t=head;
+    while(t->next) t=t->next;
+    t->next = n; n->prev=t;
+}
+
+void deleteValue(int x){
+    Node *t=head;
+    while(t && t->data!=x) t=t->next;
+    if(!t){ printf("Not found\n"); return; }
+    if(t->prev) t->prev->next = t->next;
+    else head = t->next;
+    if(t->next) t->next->prev = t->prev;
+    free(t);
+}
+
+void display(){
+    Node *t=head;
+    if(!t){ printf("Empty\n"); return; }
+    while(t){ printf("%d ", t->data); t=t->next; }
+    printf("\n");
+}
+
+int main(){
+    int ch,x;
+    while(1){
+        printf("\n1-insFront 2-insEnd 3-delete 4-display 0-exit\nChoice: ");
+        if(scanf("%d",&ch)!=1) break;
+        if(ch==0) break;
+        switch(ch){
+            case 1: printf("val: "); scanf("%d",&x); insertFront(x); break;
+            case 2: printf("val: "); scanf("%d",&x); insertEnd(x); break;
+            case 3: printf("val: "); scanf("%d",&x); deleteValue(x); break;
+            case 4: display(); break;
+            default: printf("Invalid\n");
+        }
+    }
+    return 0;
+}
