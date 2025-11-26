@@ -1,0 +1,42 @@
+/* file: stack_linked.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+Node *top = NULL;
+
+int isEmpty(){ return top==NULL; }
+void push(int x){
+    Node *n = malloc(sizeof(Node)); n->data=x; n->next=top; top=n;
+}
+int pop(){
+    if(isEmpty()){ printf("Empty\n"); return -1; }
+    Node *t = top; int val = t->data; top=top->next; free(t); return val;
+}
+int peek(){ if(isEmpty()){ printf("Empty\n"); return -1; } return top->data; }
+
+void display(){
+    if(isEmpty()){ printf("Empty\n"); return; }
+    for(Node *t=top;t;t=t->next) printf("%d ", t->data);
+    printf("\n");
+}
+
+int main(){
+    int ch,x;
+    while(1){
+        printf("\n1-push 2-pop 3-peek 4-display 0-exit\nChoice: ");
+        if(scanf("%d",&ch)!=1) break;
+        if(ch==0) break;
+        switch(ch){
+            case 1: printf("val: "); scanf("%d",&x); push(x); break;
+            case 2: printf("popped: %d\n", pop()); break;
+            case 3: printf("top: %d\n", peek()); break;
+            case 4: display(); break;
+        }
+    }
+    return 0;
+}
