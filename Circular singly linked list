@@ -1,0 +1,42 @@
+/* file: csll.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+Node *tail = NULL;
+
+void insertEnd(int x){
+    Node *n = malloc(sizeof(Node)); n->data=x;
+    if(!tail){ tail = n; tail->next = tail; }
+    else {
+        n->next = tail->next;
+        tail->next = n;
+        tail = n;
+    }
+}
+
+void display(){
+    if(!tail){ printf("Empty\n"); return; }
+    Node *t = tail->next;
+    do {
+        printf("%d ", t->data);
+        t = t->next;
+    } while(t != tail->next);
+    printf("\n");
+}
+
+int main(){
+    int ch,x;
+    while(1){
+        printf("\n1-insert 2-display 0-exit\nChoice: ");
+        if(scanf("%d",&ch)!=1) break;
+        if(ch==0) break;
+        if(ch==1){ printf("val: "); scanf("%d",&x); insertEnd(x); }
+        else if(ch==2) display();
+    }
+    return 0;
+}
