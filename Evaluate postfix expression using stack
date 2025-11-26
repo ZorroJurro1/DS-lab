@@ -1,0 +1,43 @@
+/* file: eval_postfix.c */
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define MAX 1000
+
+int st[MAX], top=-1;
+void push(int x){ st[++top]=x; }
+int pop(){ return st[top--]; }
+
+int main(){
+    char expr[1024];
+    printf("Enter postfix (space separated tokens):\n");
+    getchar(); // consume newline
+    if(!fgets(expr, sizeof(expr), stdin)) return 0;
+    char *token = strtok(expr, " \t\n");
+    while(token){
+        if(isdigit(token[0]) || (token[0]=='-' && isdigit(token[1]))){
+            push(atoi(token));
+        } else {
+            int b = pop();
+            int a = pop();
+            switch(token[0]){
+                case '+': push(a+b); break;
+                case '-': push(a-b); break;
+                case '*': push(a*b); break;
+                case '/': push(a/b); break;
+                case '^': {
+                    int res=1;
+                    for(int i=0;i<b;i++) res*=a;
+                    push(res);
+                    break;
+                }
+            }
+        }
+        token = strtok(NULL, " \t\n");
+    }
+    if(top==0) printf("Result = %d\n", st[top]);
+    else printf("Invalid expression\n");
+    return 0;
+}
