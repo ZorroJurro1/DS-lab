@@ -1,0 +1,55 @@
+/* file: circular_queue.c */
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 5
+
+int cq[MAX];
+int front=-1, rear=-1;
+
+int isEmpty(){ return front == -1; }
+int isFull(){ return (front == (rear+1)%MAX); }
+
+void insert(int x){
+    if(isFull()){ printf("Full\n"); return; }
+    if(isEmpty()) front = 0;
+    rear = (rear+1)%MAX;
+    cq[rear] = x;
+}
+
+int deleteQ(){
+    if(isEmpty()){ printf("Empty\n"); return -1; }
+    int val = cq[front];
+    if(front == rear) front = rear = -1;
+    else front = (front+1)%MAX;
+    return val;
+}
+
+int peek(){ if(isEmpty()){ printf("Empty\n"); return -1; } return cq[front]; }
+
+void display(){
+    if(isEmpty()){ printf("Empty\n"); return; }
+    int i = front;
+    while(1){
+        printf("%d ", cq[i]);
+        if(i==rear) break;
+        i=(i+1)%MAX;
+    }
+    printf("\n");
+}
+
+int main(){
+    int ch, x;
+    while(1){
+        printf("\n1-insert 2-delete 3-peek 4-display 0-exit\nChoice: ");
+        if(scanf("%d",&ch)!=1) break;
+        if(ch==0) break;
+        switch(ch){
+            case 1: printf("Val: "); scanf("%d",&x); insert(x); break;
+            case 2: printf("Deleted: %d\n", deleteQ()); break;
+            case 3: printf("Front: %d\n", peek()); break;
+            case 4: display(); break;
+            default: printf("Invalid\n");
+        }
+    }
+    return 0;
+}
