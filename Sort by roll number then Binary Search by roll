@@ -1,0 +1,44 @@
+/* file: student_binary_search.c */
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    int roll;
+    char name[50];
+    float marks;
+} Student;
+
+int cmpRoll(const void *p, const void *q){
+    int a = ((Student*)p)->roll;
+    int b = ((Student*)q)->roll;
+    return (a > b) - (a < b);
+}
+
+int main(){
+    int n;
+    printf("Number of students: ");
+    if(scanf("%d",&n)!=1) return 0;
+    Student a[n];
+    for(int i=0;i<n;i++){
+        printf("Roll, Name, Marks for student %d: ", i+1);
+        scanf("%d", &a[i].roll);
+        scanf(" %[^\n]", a[i].name);
+        scanf("%f", &a[i].marks);
+    }
+    // sort by roll using simple sort (or qsort)
+    qsort(a, n, sizeof(Student), cmpRoll);
+    int key;
+    printf("Enter roll number to search: ");
+    scanf("%d", &key);
+    int l=0, r=n-1;
+    while(l<=r){
+        int mid = (l+r)/2;
+        if(a[mid].roll == key){
+            printf("Found: Roll=%d, Name=%s, Marks=%.2f\n", a[mid].roll, a[mid].name, a[mid].marks);
+            return 0;
+        } else if(a[mid].roll < key) l = mid+1;
+        else r = mid-1;
+    }
+    printf("Student not found\n");
+    return 0;
+}
