@@ -1,0 +1,31 @@
+/* file: balanced_parentheses.c */
+#include <stdio.h>
+#include <string.h>
+
+int isMatching(char a, char b){
+    return (a=='(' && b==')') || (a=='{' && b=='}') || (a=='[' && b==']');
+}
+
+int isBalanced(const char *s){
+    int n=strlen(s);
+    char st[n];
+    int top=-1;
+    for(int i=0;i<n;i++){
+        char c = s[i];
+        if(c=='('||c=='{'||c=='[') st[++top]=c;
+        else if(c==')'||c=='}'||c==']'){
+            if(top==-1) return 0;
+            if(!isMatching(st[top--], c)) return 0;
+        }
+    }
+    return top==-1;
+}
+
+int main(){
+    char s[512];
+    printf("Enter expression: ");
+    scanf(" %[^\n]", s);
+    printf(isBalanced(s) ? "Balanced\n" : "Not balanced\n");
+    return 0;
+}
+
