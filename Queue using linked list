@@ -1,0 +1,50 @@
+/* file: queue_linked.c */
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+Node *front = NULL, *rear = NULL;
+
+int isEmpty(){ return front==NULL; }
+
+void insert(int x){
+    Node *n = malloc(sizeof(Node)); n->data=x; n->next=NULL;
+    if(rear) rear->next = n; else front = n;
+    rear = n;
+}
+
+int deleteQ(){
+    if(isEmpty()){ printf("Empty\n"); return -1; }
+    Node *t = front; int val = t->data; front = front->next;
+    if(!front) rear = NULL;
+    free(t);
+    return val;
+}
+
+int peek(){ if(isEmpty()){ printf("Empty\n"); return -1; } return front->data; }
+
+void display(){
+    if(isEmpty()){ printf("Empty\n"); return; }
+    for(Node *t=front;t;t=t->next) printf("%d ", t->data);
+    printf("\n");
+}
+
+int main(){
+    int ch,x;
+    while(1){
+        printf("\n1-insert 2-delete 3-peek 4-display 0-exit\nChoice: ");
+        if(scanf("%d",&ch)!=1) break;
+        if(ch==0) break;
+        switch(ch){
+            case 1: printf("val: "); scanf("%d",&x); insert(x); break;
+            case 2: printf("deleted: %d\n", deleteQ()); break;
+            case 3: printf("front: %d\n", peek()); break;
+            case 4: display(); break;
+        }
+    }
+    return 0;
+}
