@@ -1,0 +1,37 @@
+/* file: student_insertion_name.c */
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    int roll;
+    char name[50];
+    float marks;
+} Student;
+
+int main(){
+    int n;
+    printf("Number of students: ");
+    if(scanf("%d",&n)!=1) return 0;
+    Student a[n];
+    for(int i=0;i<n;i++){
+        printf("Roll, Name, Marks for student %d: ", i+1);
+        scanf("%d", &a[i].roll);
+        scanf(" %[^\n]", a[i].name);
+        scanf("%f", &a[i].marks);
+    }
+    // Insertion sort by name ascending
+    for(int i=1;i<n;i++){
+        Student key = a[i];
+        int j = i-1;
+        while(j>=0 && strcmp(a[j].name, key.name) > 0){
+            a[j+1] = a[j];
+            j--;
+        }
+        a[j+1] = key;
+    }
+    printf("\nSorted by name (A -> Z):\n");
+    for(int i=0;i<n;i++){
+        printf("%d\t%s\t%.2f\n", a[i].roll, a[i].name, a[i].marks);
+    }
+    return 0;
+}
